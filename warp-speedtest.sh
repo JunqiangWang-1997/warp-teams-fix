@@ -31,19 +31,20 @@ title() {
     echo -e "${CYAN}=== $1 ===${NC}"
 }
 
-# 检测WARP状态
-check_warp_status() {
-    title "检测WARP状态"
+# 检测网络连接状态
+check_network_status() {
+    title "检测网络连接状态"
     
-    # 检查WARP是否开启
-    WARP_STATUS=$(curl -s --max-time 5 https://www.cloudflare.com/cdn-cgi/trace | grep "warp=" | cut -d= -f2)
+    # 检查IPv4连接
+    echo -n "检查IPv4连接... "
+    IPV4_TEST=$(curl -s4 --max-time 5 https://ipinfo.io/ip)
     
-    if [[ "$WARP_STATUS" == "on" || "$WARP_STATUS" == "plus" ]]; then
-        info "WARP状态: ${GREEN}已开启${NC} ($WARP_STATUS)"
+    if [[ -n "$IPV4_TEST" && "$IPV4_TEST" != "" ]]; then
+        info "IPv4连接: ${GREEN}正常${NC} ($IPV4_TEST)"
         return 0
     else
-        warning "WARP状态: ${RED}未开启${NC} ($WARP_STATUS)"
-        echo "请先开启WARP: warp o"
+        error "IPv4连接: ${RED}失败${NC}"
+        echo "请检查网络连接"
         return 1
     fi
 }
@@ -181,44 +182,18 @@ test_website_access() {
     echo ""
 }
 
-# 流媒体解锁测试
-test_streaming() {
-    title "流媒体解锁测试"
-    
-    echo -n "测试 Netflix 解锁状态... "
-    # 简单的Netflix地区检测
-    NETFLIX_RESULT=$(curl -s4 --max-time 10 --user-agent "Mozilla/5.0" "https://www.netflix.com/title/70143836" 2>/dev/null)
-    
-    if echo "$NETFLIX_RESULT" | grep -q "Not Available"; then
-        echo -e "${RED}✗ 不支持${NC}"
-    elif echo "$NETFLIX_RESULT" | grep -q -E "(watch|播放)"; then
-        echo -e "${GREEN}✓ 支持${NC}"
-    else
-        echo -e "${YELLOW}? 未知${NC}"
-    fi
-    
-    echo -n "测试 YouTube Premium 地区... "
-    YOUTUBE_RESULT=$(curl -s4 --max-time 10 "https://www.youtube.com/premium" 2>/dev/null)
-    if [ $? -eq 0 ]; then
-        echo -e "${GREEN}✓ 可访问${NC}"
-    else
-        echo -e "${RED}✗ 无法访问${NC}"
-    fi
-    
-    echo ""
-}
+
 
 # 生成测速报告
 generate_report() {
     title "测速报告总结"
     
     echo -e "${PURPLE}测试时间:${NC} $(date)"
-    echo -e "${PURPLE}WARP状态:${NC} $WARP_STATUS"
     echo -e "${PURPLE}测试版本:${NC} $VERSION"
     echo ""
     echo -e "${CYAN}建议:${NC}"
-    echo "• 如果下载速度低于预期，可以尝试更换WARP IP (warp i)"
-    echo "• 如果延迟较高，可以检查WARP的工作模式"
+    echo "• 如果下载速度低于预期，可以尝试更换网络线路"
+    echo "• 如果延迟较高，可以检查网络连接质量"
     echo "• 如果网站无法访问，可能需要检查DNS设置"
     echo ""
 }
@@ -242,15 +217,14 @@ main() {
     done
     
     # 执行测试
-    if check_warp_status; then
+    if check_network_status; then
         get_ip_info
         test_ping
         test_http_speed
         test_website_access
-        test_streaming
         generate_report
     else
-        error "请先开启WARP后再进行测试"
+        error "请检查网络连接后再进行测试"
         exit 1
     fi
 }
