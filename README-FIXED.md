@@ -36,7 +36,7 @@ wget -N https://raw.githubusercontent.com/JunqiangWang-1997/warp-teams-fix/main/
 # 下载脚本
 wget -N https://raw.githubusercontent.com/JunqiangWang-1997/warp-teams-fix/main/menu.sh
 
-# 设置权限并安装
+# 安装脚本
 chmod +x menu.sh
 sudo mkdir -p /etc/wireguard/
 sudo mv menu.sh /etc/wireguard/
