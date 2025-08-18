@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# WARP IPv4 网络测速脚本
-# 测试WARP连接的网络性能
+# IPv4 网络测速脚本
+# 测试网络连接性能
 
 VERSION="1.0"
 
@@ -31,23 +31,7 @@ title() {
     echo -e "${CYAN}=== $1 ===${NC}"
 }
 
-# 检测网络连接状态
-check_network_status() {
-    title "检测网络连接状态"
-    
-    # 检查IPv4连接
-    echo -n "检查IPv4连接... "
-    IPV4_TEST=$(curl -s4 --max-time 5 https://ipinfo.io/ip)
-    
-    if [[ -n "$IPV4_TEST" && "$IPV4_TEST" != "" ]]; then
-        info "IPv4连接: ${GREEN}正常${NC} ($IPV4_TEST)"
-        return 0
-    else
-        error "IPv4连接: ${RED}失败${NC}"
-        echo "请检查网络连接"
-        return 1
-    fi
-}
+
 
 # 获取IP信息
 get_ip_info() {
@@ -202,10 +186,12 @@ generate_report() {
 main() {
     clear
     echo -e "${CYAN}"
+        echo -e "${CYAN}"
     echo "╔══════════════════════════════════════════════════════════╗"
-    echo "║               WARP IPv4 网络测速工具                     ║"
+    echo "║                 IPv4 网络测速工具                        ║"
     echo "║                    版本: $VERSION                          ║"
     echo "╚══════════════════════════════════════════════════════════╝"
+    echo -e "${NC}"
     echo -e "${NC}"
     
     # 检查必要命令
@@ -216,22 +202,17 @@ main() {
         fi
     done
     
-    # 执行测试
-    if check_network_status; then
-        get_ip_info
-        test_ping
-        test_http_speed
-        test_website_access
-        generate_report
-    else
-        error "请检查网络连接后再进行测试"
-        exit 1
-    fi
+    # 直接执行测试
+    get_ip_info
+    test_ping
+    test_http_speed
+    test_website_access
+    generate_report
 }
 
 # 脚本帮助
 show_help() {
-    echo "WARP IPv4 测速脚本"
+    echo "IPv4 网络测速脚本"
     echo ""
     echo "用法: $0 [选项]"
     echo ""
