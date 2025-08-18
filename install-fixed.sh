@@ -5,7 +5,7 @@
 # 作者修改版本
 
 VERSION='3.1.6-fixed'
-SCRIPT_URL='https://raw.githubusercontent.com/YOUR_USERNAME/warp-script-fixed/main/menu.sh'
+SCRIPT_URL='https://raw.githubusercontent.com/JunqiangWang-1997/warp-teams-fix/main/menu.sh'
 
 # 颜色定义
 RED='\033[0;31m'

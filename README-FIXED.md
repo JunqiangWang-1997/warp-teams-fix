@@ -28,13 +28,13 @@
 
 ### 方法1：一键安装（推荐）
 ```bash
-wget -N https://raw.githubusercontent.com/YOUR_USERNAME/warp-script-fixed/main/install-fixed.sh && bash install-fixed.sh
+wget -N https://raw.githubusercontent.com/JunqiangWang-1997/warp-teams-fix/main/install-fixed.sh && bash install-fixed.sh
 ```
 
 ### 方法2：手动安装
 ```bash
 # 下载脚本
-wget -N https://raw.githubusercontent.com/YOUR_USERNAME/warp-script-fixed/main/menu.sh
+wget -N https://raw.githubusercontent.com/JunqiangWang-1997/warp-teams-fix/main/menu.sh
 
 # 设置权限并安装
 chmod +x menu.sh
